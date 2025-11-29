@@ -1,42 +1,73 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+import subprocess, datetime, tempfile, os
 
-app = FastAPI()
-
-origins = [
-    "http://localhost:5173"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+app = Flask(
+    __name__,
+    static_folder="../frontend/dist",   # schimbă în build dacă e cazul
+    static_url_path="/"
 )
 
-RR_PATH = "/home/rr/rr-source"
+# NU mai avem nevoie de CORS pentru localhost:5173
+CORS(app)
 
-class InputData(BaseModel):
-    code: str
+RR_PATH = "rr_source/rr-source"
 
-@app.post("/run_rr_code")
-def run_rr_code(data: InputData):
-    import subprocess, datetime, tempfile, os
-    
-    print(data)
+@app.route("/run_rr_code", methods=["POST"])
+def run_rr_code():
+    data = request.get_json()
+    code = data.get("code", "")
+    bytecode_flag = data.get("bytecode", False)
+
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     temp_filename = f"temp_{timestamp}"
     temp_path = os.path.join(tempfile.gettempdir(), temp_filename)
 
     with open(temp_path, "w") as f:
-        f.write(data.code)
-    
-    result = subprocess.run([RR_PATH, temp_path], capture_output=True, text=True)
+        f.write(code)
 
-    return {
+    if bytecode_flag:
+        result = subprocess.run(
+            [RR_PATH, temp_path, "--bytecode"],
+            capture_output=True,
+            text=True
+        )
+    else:
+        result = subprocess.run(
+            [RR_PATH, temp_path],
+            capture_output=True,
+            text=True
+        )
+
+    stdout = result.stdout or ""
+
+    if bytecode_flag:
+        bytecode_block = stdout[9:-15]
+        result_text = stdout[-2:]
+    else:
+        bytecode_block = ""
+        result_text = stdout
+
+    return jsonify({
         "temp_file": temp_path,
-        "stdout": result.stdout,
-        "stderr": result.stderr
-    }
+        "stdout": stdout,
+        "stderr": result.stderr,
+        "bytecode": bytecode_block,
+        "result": result_text,
+    })
+
+
+# --------------------------
+# SERVIRE FRONTEND
+# --------------------------
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, "index.html")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

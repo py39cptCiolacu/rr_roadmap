@@ -9,7 +9,8 @@ import logo from "../assets/rr_logo.png"
 
 export default function Navbar() {
   return (
-    <AppBar position="static">
+    <AppBar position="static"
+    style={{backgroundColor: "#20455f"}}>
       <Toolbar>
         <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
           <img
