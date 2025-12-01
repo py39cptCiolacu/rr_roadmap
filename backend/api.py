@@ -26,32 +26,41 @@ def run_rr_code():
     with open(temp_path, "w") as f:
         f.write(code)
 
+    # run program
+    args = [RR_PATH, temp_path]
     if bytecode_flag:
-        result = subprocess.run(
-            [RR_PATH, temp_path, "--bytecode"],
-            capture_output=True,
-            text=True
-        )
-    else:
-        result = subprocess.run(
-            [RR_PATH, temp_path],
-            capture_output=True,
-            text=True
-        )
+        args.append("--bytecode")
+    
+    result = subprocess.run(
+        args,
+        capture_output=True,
+        text=True
+    )
 
     stdout = result.stdout or ""
 
+    bytecode_block = ""
+    result_text = stdout
+
     if bytecode_flag:
-        bytecode_block = stdout[9:-15]
-        result_text = stdout[-2:]
-    else:
-        bytecode_block = ""
-        result_text = stdout
+        lines = stdout.splitlines()
+        
+        # găsim indexul "BYTECODE" și "BYTECODE END"
+        try:
+            start = lines.index("BYTECODE")
+            end = lines.index("BYTECODE END")
+        except ValueError:
+            start = end = -1
+
+        if start != -1 and end != -1 and end > start:
+            bytecode_block = "\n".join(lines[start+1:end])
+
+            result_text = "\n".join(lines[end+1:]).strip()
 
     return jsonify({
         "temp_file": temp_path,
         "stdout": stdout,
-        "stderr": result.stderr,
+        "stderr": result.stderr or "",
         "bytecode": bytecode_block,
         "result": result_text,
     })
