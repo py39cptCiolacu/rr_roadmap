@@ -15,7 +15,9 @@ import {
   ListItemText,
 } from "@mui/material";
 import Editor from "@monaco-editor/react";
-import examples from "../data/examples.json";
+
+// Import examples JSON
+import examples from "../assets/examples.json";
 
 export default function RRSandbox() {
   const [code, setCode] = useState("");
@@ -43,8 +45,8 @@ export default function RRSandbox() {
     }
   };
 
-  const loadHelloWorldExample = () => {
-    setCode(`print("hello world")`);
+  const loadExample = (exampleCode) => {
+    setCode(exampleCode);
     setExamplesOpen(false);
   };
 
@@ -67,7 +69,7 @@ export default function RRSandbox() {
             minHeight: 0,
           }}
         >
-          {/* Header */}
+          {/* Header with Examples button */}
           <Box
             sx={{
               display: "flex",
@@ -82,16 +84,14 @@ export default function RRSandbox() {
             <Button
               size="small"
               variant="outlined"
-              sx={{
-                borderColor: "#20455f",
-                color: "#20455f",
-              }}
+              sx={{ borderColor: "#20455f", color: "#20455f" }}
               onClick={() => setExamplesOpen(true)}
             >
               Examples
             </Button>
           </Box>
 
+          {/* Monaco Editor */}
           <Editor
             height="100%"
             defaultLanguage="r"
@@ -212,13 +212,7 @@ export default function RRSandbox() {
         <DialogContent>
           <List>
             {examples.map((ex, idx) => (
-              <ListItemButton
-                key={idx}
-                onClick={() => {
-                  setCode(ex.code);
-                  setExamplesOpen(false);
-                }}
-              >
+              <ListItemButton key={idx} onClick={() => loadExample(ex.code)}>
                 <ListItemText primary={ex.title} secondary={ex.description} />
               </ListItemButton>
             ))}
