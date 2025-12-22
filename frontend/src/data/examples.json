@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Hello World",
+    "description": "Prints 'hello world' to the console.",
+    "code": "print(\"hello world\")"
+  },
+  {
+    "title": "Sum Numbers",
+    "description": "Adds two numbers and prints the result.",
+    "code": "a <- 5\nb <- 3\nsum<-a+b \nprint(sum)"
+  }
+]

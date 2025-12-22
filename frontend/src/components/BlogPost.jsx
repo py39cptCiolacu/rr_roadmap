@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Box, Typography, Paper } from "@mui/material";
-import { posts } from "../data/posts";
+import posts from "../data/posts.json";
 
 export default function BlogPost() {
   const { slug } = useParams();
