@@ -8,7 +8,7 @@ import datetime
 import tempfile
 import os
 
-RR_PATH = "rr_roadmap/rr_source/rr_source"
+RR_PATH = "rr_roadmap/rr_source/rr-source"
 
 app = Flask(__name__)
 CORS(app)
