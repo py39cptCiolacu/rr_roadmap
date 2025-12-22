@@ -1,17 +1,22 @@
-from flask import Flask, request, jsonify, send_from_directory
+
+# A very simple Flask Hello World app for you to get started with...
+
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-import subprocess, datetime, tempfile, os
+import subprocess
+import datetime
+import tempfile
+import os
 
-app = Flask(
-    __name__,
-    static_folder="../frontend/dist",   # schimbă în build dacă e cazul
-    static_url_path="/"
-)
-
-# NU mai avem nevoie de CORS pentru localhost:5173
+app = Flask(__name__)
 CORS(app)
+RR_PATH = "rr_roadmap/rr_source/rr-source"
 
-RR_PATH = "rr_source/rr-source"
+@app.route("/ping", methods=["GET", "OPTIONS"])
+def ping():
+    if request.method == "OPTIONS":
+        return "", 200
+    return "pong"
 
 @app.route("/run_rr_code", methods=["POST"])
 def run_rr_code():
@@ -30,12 +35,22 @@ def run_rr_code():
     args = [RR_PATH, temp_path]
     if bytecode_flag:
         args.append("--bytecode")
-    
-    result = subprocess.run(
-        args,
-        capture_output=True,
-        text=True
-    )
+
+    try:
+        result = subprocess.run(
+            args,
+            capture_output=True,
+            text=True,
+            timeout=30   # <----- LIMITA DE TIMP
+        )
+    except subprocess.TimeoutExpired:
+        return jsonify({
+        "temp_file": "",
+        "stdout": "",
+        "stderr": "TIMEOUT ERROR",
+        "bytecode": "",
+        "result": "",
+    })
 
     stdout = result.stdout or ""
 
@@ -44,7 +59,7 @@ def run_rr_code():
 
     if bytecode_flag:
         lines = stdout.splitlines()
-        
+
         # găsim indexul "BYTECODE" și "BYTECODE END"
         try:
             start = lines.index("BYTECODE")
@@ -64,19 +79,3 @@ def run_rr_code():
         "bytecode": bytecode_block,
         "result": result_text,
     })
-
-
-# --------------------------
-# SERVIRE FRONTEND
-# --------------------------
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve_react(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    return send_from_directory(app.static_folder, "index.html")
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
