@@ -7,10 +7,8 @@ import subprocess
 import datetime
 import tempfile
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
-RR_PATH = os.getenv("RR_PATH")
+RR_PATH = "rr_roadmap/rr_source/rr_source"
 
 app = Flask(__name__)
 CORS(app)
@@ -80,6 +78,3 @@ def run_rr_code():
         "bytecode": bytecode_block,
         "result": result_text,
     })
-
-if __name__ == "__main__":
-    app.run(debug=True)
