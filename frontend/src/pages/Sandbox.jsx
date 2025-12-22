@@ -16,8 +16,7 @@ import {
 } from "@mui/material";
 import Editor from "@monaco-editor/react";
 
-// Import examples JSON
-import examples from "../assets/examples.json";
+import examples from "../data/examples.json";
 
 export default function RRSandbox() {
   const [code, setCode] = useState("");
