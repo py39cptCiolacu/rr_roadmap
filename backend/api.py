@@ -7,10 +7,13 @@ import subprocess
 import datetime
 import tempfile
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+RR_PATH = os.getenv("RR_PATH")
 
 app = Flask(__name__)
 CORS(app)
-RR_PATH = "rr_roadmap/rr_source/rr-source"
 
 @app.route("/ping", methods=["GET", "OPTIONS"])
 def ping():
@@ -31,7 +34,6 @@ def run_rr_code():
     with open(temp_path, "w") as f:
         f.write(code)
 
-    # run program
     args = [RR_PATH, temp_path]
     if bytecode_flag:
         args.append("--bytecode")
@@ -41,7 +43,7 @@ def run_rr_code():
             args,
             capture_output=True,
             text=True,
-            timeout=30   # <----- LIMITA DE TIMP
+            timeout=30 
         )
     except subprocess.TimeoutExpired:
         return jsonify({
@@ -60,7 +62,6 @@ def run_rr_code():
     if bytecode_flag:
         lines = stdout.splitlines()
 
-        # găsim indexul "BYTECODE" și "BYTECODE END"
         try:
             start = lines.index("BYTECODE")
             end = lines.index("BYTECODE END")
@@ -79,3 +80,6 @@ def run_rr_code():
         "bytecode": bytecode_block,
         "result": result_text,
     })
+
+if __name__ == "__main__":
+    app.run(debug=True)

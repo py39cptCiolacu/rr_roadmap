@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import { Paper, Typography, Box } from "@mui/material";
+import { Github } from "lucide-react";
 
 export default function Roadmap() {
   const cardStyle = {
@@ -40,6 +41,64 @@ export default function Roadmap() {
         >
           <Sparkles style={{ width: 28, height: 28, color: '#f5b025' }} /> RR Interpreter Roadmap
         </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <Paper
+            sx={{
+              p: 3,
+              mb: 6,
+              borderRadius: "16px",
+              border: "2px solid #20445e",
+              backgroundColor: "#ffffff",
+              boxShadow: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Github size={32} color="#20445e" />
+              <Box>
+                <Typography sx={{ fontWeight: 700, color: "#20445e" }}>
+                  Open Source on GitHub
+                </Typography>
+                <Typography sx={{ color: "#20445e", opacity: 0.8 }}>
+                  Explore the RR interpreter source code
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box
+              component="a"
+              href="https://github.com/py39cptCiolacu/rr"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                textDecoration: "none",
+                color: "#ffffff",
+                backgroundColor: "#20445e",
+                px: 3,
+                py: 1.2,
+                borderRadius: "999px",
+                fontWeight: 600,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                transition: "all 0.2s ease",
+                "&:hover": {
+                  backgroundColor: "#163347",
+                },
+              }}
+            >
+              View Repository <ArrowRight size={18} />
+            </Box>
+          </Paper>
+        </motion.div>
 
         {/* Section 1 */}
         <motion.section
