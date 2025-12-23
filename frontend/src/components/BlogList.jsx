@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowRight, PenLine } from "lucide-react";
 import { Box, Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import posts from "../data/posts.json";
+import posts from "../data/posts";
 
 export default function BlogList() {
   const cardStyle = {
