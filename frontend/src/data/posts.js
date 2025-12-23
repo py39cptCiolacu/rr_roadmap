@@ -93,7 +93,7 @@ The diagram below illustrates this workflow in more detail.
 - Minimal vector operations  
 - Basic exception mechanism (stop keyword)
 
-You could follow the development process here: https://github.com/py39cptCiolacu/rr/milestone/1
+You could follow the development process [here](https://github.com/py39cptCiolacu/rr/milestone/1)
 
 ---
 
@@ -115,7 +115,7 @@ A preliminary RR version is in the **Sandbox** section of the website.
 Join development or propose features:
 
 - Email: **dciolacu87@yahoo.com**  
-- GitHub repository interaction: https://github.com/py39cptCiolacu/rr
+- [GitHub repository](https://github.com/py39cptCiolacu/rr)
 `,
     published: true,
   },

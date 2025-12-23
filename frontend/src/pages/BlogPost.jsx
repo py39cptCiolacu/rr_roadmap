@@ -75,6 +75,14 @@ export default function BlogPost() {
                       }}
                     />
                   ),
+                  a: ({ node, ...props }) => (
+                    <a
+                      {...props}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "#1a73e8" }}
+                    />
+                  ),
                 }}
               >
                 {post.content}

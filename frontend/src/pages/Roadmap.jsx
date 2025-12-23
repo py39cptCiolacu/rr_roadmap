@@ -12,6 +12,7 @@ export default function Roadmap() {
     boxShadow: 3,
     mb: 4,
     overflow: "hidden",
+    fontFamily: '"Verdana", sans-serif', // <- aici
   };
 
   const titleStyle = {
@@ -19,6 +20,7 @@ export default function Roadmap() {
     fontWeight: 700,
     color: "#20445e",
     fontSize: { xs: "1.25rem", md: "1.5rem" },
+    fontFamily: '"Verdana", sans-serif', // <- aici
   };
 
   const listItemStyle = {
@@ -28,6 +30,7 @@ export default function Roadmap() {
     color: "#20445e",
     mb: 1,
     fontSize: { xs: "0.95rem", md: "1rem" },
+    fontFamily: '"Verdana", sans-serif', // <- aici
   };
 
   const iconStyle = {
@@ -60,6 +63,7 @@ export default function Roadmap() {
             alignItems: "center",
             gap: "8px",
             fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
+            fontFamily: '"Verdana", sans-serif', // <- aici
             color: "#20445e",
             flexWrap: "wrap",
           }}
@@ -117,6 +121,7 @@ export default function Roadmap() {
                 py: 1.2,
                 borderRadius: "999px",
                 fontWeight: 600,
+                fontFamily: '"Verdana", sans-serif', // fontul dorit
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

@@ -1,4 +1,4 @@
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, PenLine } from "lucide-react";
 import { Box, Paper, Typography } from "@mui/material";
@@ -41,6 +41,7 @@ export default function BlogList() {
             marginBottom: "3rem",
             display: "flex",
             justifyContent: "center",
+            fontFamily: '"Verdana", sans-serif', // <- aici
             alignItems: "center",
             gap: "10px",
             fontSize: "2.5rem",
@@ -100,6 +101,7 @@ export default function BlogList() {
                     color: "#20445e",
                     cursor: "pointer",
                     textDecoration: "none",
+                    fontFamily: '"Verdana", sans-serif', // <- aici
                     "&:hover": {
                       textDecoration: "underline",
                     },
@@ -116,6 +118,7 @@ export default function BlogList() {
                     fontWeight: 600,
                     color: "#20445e",
                     opacity: 0.5,
+                    fontFamily: '"Verdana", sans-serif', // <- aici
                     cursor: "not-allowed",
                   }}
                 >
