@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles"; // import MUI ThemeProvider
 import theme from "./theme"; // import theme-ul pe care l-ai creat
 
@@ -12,7 +12,7 @@ import BlogPost from "./pages/BlogPost";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Roadmap />} />
           <Route path="/sandbox" element={<Sandbox />} />
@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           {/* Optional: catch-all pentru 404 */}
           <Route path="*" element={<Roadmap />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   </React.StrictMode>
 );
