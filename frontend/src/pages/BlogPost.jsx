@@ -68,21 +68,44 @@ export default function BlogPost() {
                       sx={{
                         display: "block",
                         mx: "auto",
-                        width: "100%", // ocupă tot spațiul containerului
-                        maxWidth: 700, // dar nu mai mare decât 400px
-                        height: "auto", // păstrează proporțiile
+                        width: "100%",
+                        maxWidth: 700,
+                        height: "auto",
                         mb: 3,
                       }}
                     />
                   ),
-                  a: ({ node, ...props }) => (
-                    <a
-                      {...props}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "#1a73e8" }}
-                    />
-                  ),
+                  a: ({ node, href, ...props }) => {
+                    // Dacă e link intern (hash), fac scroll
+                    if (href && href.startsWith("#")) {
+                      const handleClick = (e) => {
+                        e.preventDefault();
+                        const targetId = href.replace("#", "");
+                        const element = document.getElementById(targetId);
+                        if (element)
+                          element.scrollIntoView({ behavior: "smooth" });
+                      };
+                      return (
+                        <a
+                          {...props}
+                          href={href}
+                          onClick={handleClick}
+                          style={{ color: "#1a73e8", cursor: "pointer" }}
+                        />
+                      );
+                    }
+
+                    // Link extern → deschide normal
+                    return (
+                      <a
+                        {...props}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "#1a73e8" }}
+                      />
+                    );
+                  },
                 }}
               >
                 {post.content}
