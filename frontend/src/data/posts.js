@@ -6,7 +6,7 @@ const posts = [
     date: "December 23, 2025",
     excerpt:
       "An overview of the motivation behind RR and how RPython makes it possible.",
-    content: "/public/blogs_md/rr_introduction.md",
+    content: "/blogs_md/rr_introduction.md",
     published: true,
   },
   {
@@ -15,7 +15,7 @@ const posts = [
     date: "February 1, 2026",
     excerpt:
       "A short introduction on how Reticulate is using Python C API to integrate Python into R",
-    content: "/public/blogs_md/sharing_data_part1.md",
+    content: "/blogs_md/sharing_data_part1.md",
     published: true,
   },
   {
