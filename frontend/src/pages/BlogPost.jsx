@@ -5,24 +5,39 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkSlug from "remark-slug";
 import posts from "../data/posts";
+import { useEffect, useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import mermaid from "mermaid";
 
 export default function BlogPost() {
   const { slug } = useParams();
   const post = posts.find((p) => p.slug === slug);
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    if (!post) return;
+
+    fetch(post.content)
+      .then((res) => res.text())
+      .then((text) => setContent(text))
+      .catch((err) => {
+        console.error("Failed to load markdown:", err);
+        setContent("Failed to load content.");
+      });
+  }, [post]);
+
+  useEffect(() => {
+    // inițializează toate diagramele mermaid după render
+    mermaid.init(undefined, document.querySelectorAll(".mermaid"));
+  }, [content]);
 
   if (!post) return <Typography>Article not found</Typography>;
 
   return (
     <>
       <Navbar />
-      {/* Fundal gri deschis */}
-      <Box
-        sx={{
-          backgroundColor: "#f0f2f5", // gri deschis
-          minHeight: "100vh", // să acopere tot ecranul
-          py: 4, // padding vertical
-        }}
-      >
+      <Box sx={{ backgroundColor: "#f0f2f5", minHeight: "100vh", py: 4 }}>
         <Box sx={{ p: { xs: 2, md: 8 }, maxWidth: "800px", mx: "auto" }}>
           <Paper sx={{ p: 4, borderRadius: "16px" }}>
             <Typography variant="h4" sx={{ mb: 2, color: "#20445e" }}>
@@ -47,7 +62,7 @@ export default function BlogPost() {
                 "& code": {
                   backgroundColor: "#f4f6f8",
                   px: 0.5,
-                  borderRadius: "4px",
+                  borderRadius: 4,
                   fontFamily: "monospace",
                 },
                 "& blockquote": {
@@ -61,29 +76,39 @@ export default function BlogPost() {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkSlug]}
                 components={{
-                  img: ({ node, ...props }) => (
-                    <Box
-                      component="img"
+                  h2: ({ node, ...props }) => (
+                    <Typography
+                      component="h2"
+                      id={node.data?.id || undefined}
+                      sx={{ mt: 4, mb: 2, fontSize: "2rem", fontWeight: 700 }}
                       {...props}
-                      sx={{
-                        display: "block",
-                        mx: "auto",
-                        width: "100%",
-                        maxWidth: 700,
-                        height: "auto",
-                        mb: 3,
-                      }}
                     />
                   ),
-                  a: ({ node, href, ...props }) => {
-                    // Dacă e link intern (hash), fac scroll
-                    if (href && href.startsWith("#")) {
+                  h3: ({ node, ...props }) => (
+                    <Typography
+                      component="h3"
+                      id={node.data?.id || undefined}
+                      sx={{
+                        mt: 3,
+                        mb: 1.5,
+                        fontSize: "1.5rem",
+                        fontWeight: 600,
+                      }}
+                      {...props}
+                    />
+                  ),
+                  a: ({ href, ...props }) => {
+                    if (href?.startsWith("#")) {
                       const handleClick = (e) => {
                         e.preventDefault();
-                        const targetId = href.replace("#", "");
-                        const element = document.getElementById(targetId);
-                        if (element)
-                          element.scrollIntoView({ behavior: "smooth" });
+                        const el = document.getElementById(
+                          href.replace("#", ""),
+                        );
+                        if (el)
+                          el.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
                       };
                       return (
                         <a
@@ -94,8 +119,6 @@ export default function BlogPost() {
                         />
                       );
                     }
-
-                    // Link extern → deschide normal
                     return (
                       <a
                         {...props}
@@ -106,9 +129,83 @@ export default function BlogPost() {
                       />
                     );
                   },
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || "");
+                    const language = match ? match[1] : "text";
+
+                    // MERMAID
+                    if (!inline && language === "mermaid") {
+                      return (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            my: 4,
+                          }}
+                        >
+                          <Box sx={{ mb: 3 }}>
+                            <div className="mermaid">{String(children)}</div>
+                          </Box>
+                        </Box>
+                      );
+                    }
+
+                    // BLOCK CODE
+                    if (!inline && match) {
+                      return (
+                        <Box sx={{ mb: 3 }}>
+                          <Box
+                            sx={{
+                              backgroundColor: "#2d2d2d",
+                              color: "#fff",
+                              px: 1,
+                              py: 0.3,
+                              borderTopLeftRadius: 4,
+                              borderTopRightRadius: 4,
+                              fontSize: "0.75rem",
+                              fontFamily: "monospace",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {language}
+                          </Box>
+                          <SyntaxHighlighter
+                            style={oneDark}
+                            language={language}
+                            PreTag="div"
+                            customStyle={{
+                              borderRadius: "0 0 8px 8px",
+                              margin: 0,
+                              padding: "1rem",
+                              overflowX: "auto",
+                            }}
+                            {...props}
+                          >
+                            {String(children).replace(/\n$/, "")}
+                          </SyntaxHighlighter>
+                        </Box>
+                      );
+                    }
+
+                    // COD INLINE
+                    return (
+                      <Box
+                        component="code"
+                        sx={{
+                          backgroundColor: "#f4f6f8",
+                          px: 0.5,
+                          borderRadius: 4,
+                          fontFamily: "monospace",
+                        }}
+                        {...props}
+                      >
+                        {children}
+                      </Box>
+                    );
+                  },
                 }}
               >
-                {post.content}
+                {content}
               </ReactMarkdown>
             </Typography>
           </Paper>
