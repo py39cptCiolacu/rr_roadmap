@@ -154,7 +154,3 @@ From a runtime perspective, Reticulate has several important implications:
 ```
 
 ```
-
-```
-
-```

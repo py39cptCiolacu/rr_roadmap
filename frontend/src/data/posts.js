@@ -11,11 +11,22 @@ const posts = [
   },
   {
     title: "Sharing data between R and Python. Part 1 - Reticulate",
+    author: "Daniel Cosmin Ciolacu",
     slug: "sharing-data-part1-retitculate",
     date: "February 1, 2026",
     excerpt:
       "A short introduction on how Reticulate is using Python C API to integrate Python into R",
     content: "/blogs_md/sharing_data_part1.md",
+    published: true,
+  },
+  {
+    title: "Sharing data between R and Python. Part 2 - PyRMap",
+    author: "Daniel Cosmin Ciolacu",
+    slug: "sharing-data-part2-pyrmap",
+    date: "February 10, 2026",
+    excerpt:
+      "A short introduction on how PyRMap is using mmap syscall to integrate share date as fast as possible between R and Python",
+    content: "/blogs_md/sharing_data_part2.md",
     published: true,
   },
   {

@@ -8,6 +8,7 @@ import Roadmap from "./pages/Roadmap";
 import Sandbox from "./pages/Sandbox";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
+import DocsOpcodes from "./pages/docs/DocsOpcodes";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/" element={<Roadmap />} />
           <Route path="/sandbox" element={<Sandbox />} />
           <Route path="/blog" element={<BlogList />} />
+          <Route path="/docs/opcodes" element={<DocsOpcodes />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           {/* Optional: catch-all pentru 404 */}
           <Route path="*" element={<Roadmap />} />
