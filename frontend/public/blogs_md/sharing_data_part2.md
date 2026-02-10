@@ -109,6 +109,8 @@ In PyRMap, `mmap` is not merely an implementation detail but the **core abstract
 
 ### 3. PyRMap workflow
 
+For a more visual explanation check [PyRMap Workflow](https://imgur.com/gallery/pyrmap-workflow-it0Fx9b)
+
 The core idea behind PyRMap is intentionally simple.  
 The R process imports the `run_python.R` library, which exposes the following functions:
 
@@ -148,8 +150,6 @@ These functions accept the following arguments:
 5. **Result retrieval**  
    Control returns to the R process, which memory-maps and reads the result file.  
    Temporary files are then cleaned up according to the selected storage mode.
-
-![PyRMap Workflow](https://i.ibb.co/zHVXjQZy/Untitled-Diagram-drawio-1.jpg)
 
 ---
 
