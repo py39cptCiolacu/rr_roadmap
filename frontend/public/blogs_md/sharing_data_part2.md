@@ -11,7 +11,8 @@
    - [5.1 Multiple calls with one data file](#51-multiple-calls-with-one-data-file)
    - [5.2 R - Python pipeline](#52-r-python-pipeline)
    - [5.3 Sharing S3 object](#53-sharing-s3-object)
-6. [Resources](#6-resources)
+6. [Conclusions](#6-conclusions)
+7. [Resources](#6-resources)
 
 ---
 
@@ -101,15 +102,6 @@ In PyRMap’s default configuration, memory-mapped files are created under `/dev
 - automatic cleanup on system reboot.
 
 For scenarios where data size exceeds available RAM or persistence is required, PyRMap also supports mapping files on disk, trading some performance for capacity and durability.
-
-#### 2.4 Why mmap fits PyRMap
-
-`mmap` aligns naturally with PyRMap’s design goals:
-
-- **high performance** through zero-copy data access;
-- **explicit control** over data layout and synchronization;
-- **portability** across POSIX-compliant systems;
-- **conceptual simplicity**, relying on files, shared memory, and minimal coordination.
 
 In PyRMap, `mmap` is not merely an implementation detail but the **core abstraction** that enables fast, predictable, and extensible communication between R and Python processes.
 
@@ -339,7 +331,21 @@ def read_and_create_s3_object():
 
 ---
 
-### 6. Resources
+### 6. Conclusions
+
+- PyRMap leverages mmap to share data between R and Python processes, **avoiding redundant data copies** and eliminating serialization/deserialization overhead. This enables **fast data transfer** and direct in-memory access, which is crucial for large datasets.
+
+- The protocol abstracts away the complexity of R–Python interoperability, automatically handling type conversions and process synchronization. Users can call familiar functions in R or Python **without worrying about low-level implementation details**.
+
+- PyRMap supports multiple use cases such as: **reusing the same data file** across multiple independent executions, **pipeline execution** where one process’s output becomes the next process’s input or **sharing complex S3 objects** between R and Python
+
+- Metadata files serve both as synchronization flags and data descriptors, ensuring **reliable data sharing** and integrity—even for complex objects.
+
+- PyRMap’s design allows easy addition of new data types and execution patterns (e.g., parallel pipelines), making it suitable for high-performance, scalable R–Python applications.
+
+---
+
+### 7. Resources
 
 - [PyRMap source code](https://github.com/py39cptCiolacu/pyrmap)
 - [mmap docs](https://man7.org/linux/man-pages/man2/mmap.2.html)
