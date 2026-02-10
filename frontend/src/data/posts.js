@@ -25,7 +25,7 @@ const posts = [
     slug: "sharing-data-part2-pyrmap",
     date: "February 10, 2026",
     excerpt:
-      "A short introduction on how PyRMap is using mmap syscall to integrate share date as fast as possible between R and Python",
+      "PyRMap leverages the mmap system call to share data between R and Python at lightning speed, allowing both languages to work directly on the same memory without unnecessary copying or conversions.",
     content: "/blogs_md/sharing_data_part2.md",
     published: true,
   },
